@@ -36,6 +36,12 @@ spec:
           args:
             - "--character-set-server=utf8mb4"
             - "--collation-server=utf8mb4_unicode_ci"
+            {{- if .Values.mysql.config }}
+            - "--max-connections={{ .Values.mysql.config.maxConnections | default 1000 }}"
+            - "--max-connect-errors={{ .Values.mysql.config.maxConnectErrors | default 100000 }}"
+            - "--wait-timeout={{ .Values.mysql.config.waitTimeout | default 600 }}"
+            - "--interactive-timeout={{ .Values.mysql.config.interactiveTimeout | default 600 }}"
+            {{- end }}
           readinessProbe:
             exec:
               command:

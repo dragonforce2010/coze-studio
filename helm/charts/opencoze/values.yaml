@@ -18,6 +18,14 @@ mysql:
     size: "50Gi"
   initScripts:
     - files/mysql/schema.sql
+  # MySQL连接数优化配置 - 解决高并发场景下的连接瓶颈
+  config:
+    maxConnections: 1000
+    maxConnectErrors: 100000
+    waitTimeout: 600
+    interactiveTimeout: 600
+    characterSetServer: utf8mb4
+    collationServer: utf8mb4_unicode_ci
 
 redis:
   enabled: true
@@ -60,6 +68,16 @@ cozeServer:
     SERVER_HOST: "localhost${LISTEN_ADDR}"
     LOG_LEVEL: "debug"
     MAX_REQUEST_BODY_SIZE: "1073741824"
+    # MySQL连接池优化配置 - 解决高并发场景下的连接瓶颈
+    MYSQL_MAX_OPEN_CONNS: "500"
+    MYSQL_MAX_IDLE_CONNS: "100"
+    MYSQL_CONN_MAX_LIFETIME: "5m"
+    MYSQL_CONN_MAX_IDLE_TIME: "10m"
+    # HTTP服务器超时优化配置 - 解决高并发下的连接超时问题
+    HTTP_READ_TIMEOUT: "60"
+    HTTP_WRITE_TIMEOUT: "60"
+    HTTP_IDLE_TIMEOUT: "120"
+    HTTP_MAX_CONNECTIONS: "10000"
     STORAGE_TYPE: "minio"
     MINIO_PROXY_ENDPOINT: ":8889"
     COZE_MQ_TYPE: rmq

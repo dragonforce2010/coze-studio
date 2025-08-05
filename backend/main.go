@@ -29,6 +29,7 @@ import (
 	"os"
 	"runtime/debug"
 	"strings"
+	"time"
 
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/common/config"
@@ -69,9 +70,23 @@ func startHttpServer() {
 	maxSize := conv.StrToInt64D(maxRequestBodySize, 1024*1024*200)
 	addr := getEnv("LISTEN_ADDR", ":8888")
 
+	// 获取超时配置参数
+	readTimeout := conv.StrToInt64D(getEnv("HTTP_READ_TIMEOUT", "60"), 60) * 1000 // 转换为毫秒
+	writeTimeout := conv.StrToInt64D(getEnv("HTTP_WRITE_TIMEOUT", "60"), 60) * 1000
+	idleTimeout := conv.StrToInt64D(getEnv("HTTP_IDLE_TIMEOUT", "120"), 120) * 1000
+
+	// 获取并发配置参数
+	maxConnections := conv.StrToIntD(getEnv("HTTP_MAX_CONNECTIONS", "10000"), 10000)
+
 	opts := []config.Option{
 		server.WithHostPorts(addr),
 		server.WithMaxRequestBodySize(int(maxSize)),
+		// 设置超时参数
+		server.WithReadTimeout(time.Duration(readTimeout) * time.Millisecond),
+		server.WithWriteTimeout(time.Duration(writeTimeout) * time.Millisecond),
+		server.WithIdleTimeout(time.Duration(idleTimeout) * time.Millisecond),
+		// 设置最大连接数
+		server.WithMaxConnections(maxConnections),
 	}
 
 	useSSL := getEnv(consts.UseSSL, "0")
