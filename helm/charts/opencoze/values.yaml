@@ -111,6 +111,42 @@ cozeServer:
     VE_IMAGEX_TEMPLATE: ""
     VE_IMAGEX_UPLOAD_HOST: "https://imagex.volcengineapi.com"
 
+# -- coze-web configuration
+cozeWeb:
+  enabled: true
+  # -- Number of replicas for the coze-web deployment
+  replicaCount: 1
+
+  image:
+    repository: opencoze/web
+    # -- Keep the mirror up to date
+    pullPolicy: Always
+    tag: 'latest'
+
+  service:
+    type: LoadBalancer
+    port: 8888
+    targetPort: 80
+
+  # -- Nginx configuration for coze-web
+  nginx:
+    # -- Custom nginx.conf content (optional)
+    config: ""
+    # -- Custom default.conf content (optional)
+    defaultConfig: ""
+
+  # -- Environment variables for coze-web
+  env: {}
+
+  # -- Resource limits and requests
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
 rocketmq:
   enabled: true
   namesrv:

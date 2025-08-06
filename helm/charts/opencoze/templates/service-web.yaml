@@ -1,0 +1,20 @@
+{{- if .Values.cozeWeb.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ printf "%s-web" (include "opencoze.fullname" .) }}
+  labels:
+    {{- include "opencoze.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+spec:
+  type: {{ .Values.cozeWeb.service.type }}
+  ports:
+    - port: {{ .Values.cozeWeb.service.port }}
+      targetPort: {{ .Values.cozeWeb.service.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "opencoze.name" . }}
+    app.kubernetes.io/component: web
+{{- end }}

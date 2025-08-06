@@ -1,0 +1,26 @@
+{{- if and .Values.cozeWeb.enabled .Values.cozeWeb.nginx.config }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "opencoze.fullname" . }}-web-nginx-config
+  labels:
+    {{- include "opencoze.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+data:
+  nginx.conf: |
+{{ .Values.cozeWeb.nginx.config | indent 4 }}
+{{- end }}
+
+---
+{{- if and .Values.cozeWeb.enabled .Values.cozeWeb.nginx.defaultConfig }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "opencoze.fullname" . }}-web-nginx-default-config
+  labels:
+    {{- include "opencoze.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+data:
+  default.conf: |
+{{ .Values.cozeWeb.nginx.defaultConfig | indent 4 }}
+{{- end }}
