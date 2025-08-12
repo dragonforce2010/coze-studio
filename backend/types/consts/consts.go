@@ -95,6 +95,15 @@ const (
 
 	ParserType        = "PARSER_TYPE"
 	PPStructureAPIURL = "PADDLEOCR_STRUCTURE_API_URL"
+
+	ModelProvider               = "MODEL_PROVIDER"
+	ModelProviderVolcengineMAAS = "volcengine_maas"
+	ModelProviderStatic         = "static"
+
+	VolcengineMAASAccessKey = "VOLCENGINE_MAAS_ACCESS_KEY"
+	VolcengineMAASSecretKey = "VOLCENGINE_MAAS_SECRET_KEY"
+	VolcengineMAASRegion    = "VOLCENGINE_MAAS_REGION"
+	VolcengineMAASAPIKey    = "VOLCENGINE_MAAS_API_KEY"
 )
 
 const (
