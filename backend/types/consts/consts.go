@@ -87,6 +87,15 @@ const (
 	UseSSL      = "USE_SSL"
 	SSLCertFile = "SSL_CERT_FILE"
 	SSLKeyFile  = "SSL_KEY_FILE"
+
+	ModelProvider               = "MODEL_PROVIDER"
+	ModelProviderVolcengineMAAS = "volcengine_maas"
+	ModelProviderStatic         = "static"
+
+	VolcengineMAASAccessKey = "VOLCENGINE_MAAS_ACCESS_KEY"
+	VolcengineMAASSecretKey = "VOLCENGINE_MAAS_SECRET_KEY"
+	VolcengineMAASRegion    = "VOLCENGINE_MAAS_REGION"
+	VolcengineMAASAPIKey    = "VOLCENGINE_MAAS_API_KEY"
 )
 
 const (
