@@ -28,13 +28,24 @@ import (
 	"github.com/coze-dev/coze-studio/backend/infra/contract/chatmodel"
 	"github.com/coze-dev/coze-studio/backend/infra/contract/modelmgr"
 	"github.com/coze-dev/coze-studio/backend/infra/impl/modelmgr/static"
+	"github.com/coze-dev/coze-studio/backend/infra/impl/modelmgr/volcengine_maas"
 	"github.com/coze-dev/coze-studio/backend/pkg/logs"
+	"github.com/coze-dev/coze-studio/backend/types/consts"
 )
 
 func initModelMgr() (modelmgr.Manager, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return nil, err
+	}
+
+	modelProvider := os.Getenv(consts.ModelProvider)
+	if modelProvider == consts.ModelProviderVolcengineMAAS {
+		staticModel, err := initModelByTemplate(wd, "resources/conf/model/template")
+		if err != nil {
+			return nil, err
+		}
+		return volcengine_maas.NewModelMgr(staticModel)
 	}
 
 	staticModel, err := initModelByTemplate(wd, "resources/conf/model")
