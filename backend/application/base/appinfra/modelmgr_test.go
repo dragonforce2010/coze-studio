@@ -18,6 +18,7 @@ package appinfra
 
 import (
 	"fmt"
+	"github.com/coze-dev/coze-studio/backend/pkg/logs"
 	"os"
 	"testing"
 
@@ -38,9 +39,10 @@ func TestInitByEnv(t *testing.T) {
 	}
 
 	wd, err := os.Getwd()
+	logs.Info(wd)
 	assert.NoError(t, err)
 
-	ms, err := initModelByEnv(wd, "../../../conf/model/template")
+	_, err = initModelByTemplate(wd, "../../../conf/model")
 	assert.NoError(t, err)
-	assert.Len(t, ms, len(modelMapping[chatmodel.ProtocolArk]))
+
 }

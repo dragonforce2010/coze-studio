@@ -342,10 +342,10 @@ services:
       - coze-network
 
   coze-server:
-    # build:
-    #   context: ../
-    #   dockerfile: backend/Dockerfile
-    image: opencoze/opencoze:latest
+    build:
+      context: ../
+      dockerfile: backend/Dockerfile
+    # image: opencoze/opencoze:latest
     restart: always
     container_name: coze-server
     env_file: *env_file

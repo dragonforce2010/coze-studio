@@ -25,13 +25,13 @@ import (
 )
 
 type Model struct {
-	ID                int64             `yaml:"id"`
-	Name              string            `yaml:"name"`
-	IconURI           string            `yaml:"icon_uri"`
-	IconURL           string            `yaml:"icon_url"`
-	Description       *MultilingualText `yaml:"description"`
-	DefaultParameters []*Parameter      `yaml:"default_parameters"`
-	Meta              ModelMeta         `yaml:"meta"`
+	ID                int64             `yaml:"id" json:"id"`
+	Name              string            `yaml:"name" json:"name"`
+	IconURI           string            `yaml:"icon_uri" json:"icon_uri"`
+	IconURL           string            `yaml:"icon_url" json:"icon_url"`
+	Description       *MultilingualText `yaml:"description" json:"description"`
+	DefaultParameters []*Parameter      `yaml:"default_parameters" json:"default_parameters"`
+	Meta              ModelMeta         `yaml:"meta" json:"meta"`
 }
 
 func (m *Model) FindParameter(name ParameterName) (*Parameter, bool) {
@@ -58,7 +58,7 @@ type Parameter struct {
 	DefaultVal DefaultValue      `json:"default_val" yaml:"default_val"`
 	Precision  int               `json:"precision,omitempty" yaml:"precision,omitempty"` // float precision, default 2
 	Options    []*ParamOption    `json:"options" yaml:"options"`                         // enum options
-	Style      DisplayStyle      `json:"param_class" yaml:"style"`
+	Style      DisplayStyle      `json:"style" yaml:"style"`
 }
 
 func (p *Parameter) GetFloat(tp DefaultType) (float64, error) {
@@ -123,10 +123,10 @@ func (p *Parameter) GetString(tp DefaultType) (string, error) {
 }
 
 type ModelMeta struct {
-	Protocol   chatmodel.Protocol `yaml:"protocol"`    // Model Communication Protocol
-	Capability *Capability        `yaml:"capability"`  // model capability
-	ConnConfig *chatmodel.Config  `yaml:"conn_config"` // model connection configuration
-	Status     ModelStatus        `yaml:"status"`      // model state
+	Protocol   chatmodel.Protocol `yaml:"protocol" json:"protocol"    // Model Communication Protocol`
+	Capability *Capability        `yaml:"capability" json:"capability"  // model capability`
+	ConnConfig *chatmodel.Config  `yaml:"conn_config" json:"conn_config" // model connection configuration`
+	Status     ModelStatus        `yaml:"status" json:"status"      // model state`
 }
 
 type DefaultValue map[DefaultType]string
