@@ -88,6 +88,7 @@ const (
 	SSLCertFile = "SSL_CERT_FILE"
 	SSLKeyFile  = "SSL_KEY_FILE"
 
+<<<<<<< HEAD
 	ModelProvider               = "MODEL_PROVIDER"
 	ModelProviderVolcengineMAAS = "volcengine_maas"
 	ModelProviderStatic         = "static"
@@ -96,6 +97,15 @@ const (
 	VolcengineMAASSecretKey = "VOLCENGINE_MAAS_SECRET_KEY"
 	VolcengineMAASRegion    = "VOLCENGINE_MAAS_REGION"
 	VolcengineMAASAPIKey    = "VOLCENGINE_MAAS_API_KEY"
+=======
+	OCRType     = "OCR_TYPE"
+	VeOCRAK     = "VE_OCR_AK"
+	VeOCRSK     = "VE_OCR_SK"
+	PPOCRAPIURL = "PADDLEOCR_OCR_API_URL"
+
+	ParserType        = "PARSER_TYPE"
+	PPStructureAPIURL = "PADDLEOCR_STRUCTURE_API_URL"
+>>>>>>> 6b60c07c (feat(infra): integrate PaddleOCR's PP-StructureV3 as a document parser backend (#714))
 )
 
 const (
