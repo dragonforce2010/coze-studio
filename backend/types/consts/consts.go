@@ -92,10 +92,12 @@ const (
 	ModelProviderVolcengineMAAS = "volcengine_maas"
 	ModelProviderStatic         = "static"
 
-	VolcengineMAASAccessKey = "VOLCENGINE_MAAS_ACCESS_KEY"
-	VolcengineMAASSecretKey = "VOLCENGINE_MAAS_SECRET_KEY"
-	VolcengineMAASRegion    = "VOLCENGINE_MAAS_REGION"
-	VolcengineMAASAPIKey    = "VOLCENGINE_MAAS_API_KEY"
+	VolcengineAccessKey = "VOLCENGINE_ACCESS_KEY"
+	VolcengineSecretKey = "VOLCENGINE_SECRET_KEY"
+	VolcengineRegion    = "VOLCENGINE_REGION"
+
+	VolcengineMAASAPIKey        = "VOLCENGINE_MAAS_API_KEY"
+	VolcengineFaasSandboxFuncId = "VOLCENGINE_FAAS_SANDBOX_FUNC_ID"
 )
 
 const (

@@ -32,12 +32,14 @@ import (
 	"github.com/coze-dev/coze-studio/backend/infra/impl/cache/redis"
 	"github.com/coze-dev/coze-studio/backend/infra/impl/coderunner/direct"
 	"github.com/coze-dev/coze-studio/backend/infra/impl/coderunner/sandbox"
+	"github.com/coze-dev/coze-studio/backend/infra/impl/coderunner/volcenginesandbox"
 	"github.com/coze-dev/coze-studio/backend/infra/impl/es"
 	"github.com/coze-dev/coze-studio/backend/infra/impl/eventbus"
 	"github.com/coze-dev/coze-studio/backend/infra/impl/idgen"
 	"github.com/coze-dev/coze-studio/backend/infra/impl/imagex/veimagex"
 	"github.com/coze-dev/coze-studio/backend/infra/impl/mysql"
 	"github.com/coze-dev/coze-studio/backend/infra/impl/storage"
+	"github.com/coze-dev/coze-studio/backend/pkg/logs"
 	"github.com/coze-dev/coze-studio/backend/types/consts"
 )
 
@@ -179,6 +181,21 @@ func initCodeRunner() coderunner.Runner {
 			config.MemoryLimitMB = 100
 		}
 		return sandbox.NewRunner(config)
+	case "volcengine":
+		ak := os.Getenv(consts.VolcengineAccessKey)
+		sk := os.Getenv(consts.VolcengineSecretKey)
+		region := os.Getenv(consts.VolcengineRegion)
+		funcId := os.Getenv(consts.VolcengineFaasSandboxFuncId)
+		if ak == "" || sk == "" || region == "" || funcId == "" {
+			logs.CtxErrorf(context.Background(), "volcengine access key, secret key, region or function id is not set")
+			return direct.NewRunner()
+		}
+		return volcenginesandbox.NewRunner(&volcenginesandbox.Config{
+			AccessKey: ak,
+			SecretKey: sk,
+			Region:    region,
+			FuncId:    funcId,
+		})
 	default:
 		return direct.NewRunner()
 	}
