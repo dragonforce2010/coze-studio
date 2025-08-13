@@ -27,6 +27,7 @@ import (
 	"github.com/coze-dev/coze-studio/backend/infra/contract/modelmgr"
 	"github.com/coze-dev/coze-studio/backend/pkg/lang/ptr"
 	"github.com/coze-dev/coze-studio/backend/pkg/lang/sets"
+	"github.com/coze-dev/coze-studio/backend/pkg/logs"
 	"github.com/coze-dev/coze-studio/backend/types/consts"
 	"github.com/volcengine/volcengine-go-sdk/service/ark"
 	"github.com/volcengine/volcengine-go-sdk/volcengine"
@@ -35,6 +36,21 @@ import (
 )
 
 var _ modelmgr.Manager = (*volcModelManager)(nil)
+
+var preEndpointID = map[string]string{
+	"Doubao-1.5-Vision-Pro":          "doubao-1-5-vision-pro-250328",
+	"Doubao-Seed-1.6-Thinking":       "doubao-seed-1-6-thinking-250715",
+	"Doubao-Seed-1.6-Flash":          "doubao-seed-1-6-flash-250715",
+	"Doubao-1.5-Pro-32k":             "doubao-1-5-pro-32k-250115",
+	"Doubao-1.5-Thinking-Vision-Pro": "doubao-1-5-thinking-vision-pro-250428",
+	"Doubao-1.5-Thinking-Pro":        "doubao-1-5-thinking-pro-250415",
+	"Doubao-Seed-1.6":                "doubao-seed-1-6-250615",
+	"Doubao-1.5-Pro-256k":            "doubao-1-5-pro-256k-250115",
+	"Doubao-1.5-Lite":                "doubao-1-5-lite-32k-250115",
+	"Doubao-1.5-Vision-Lite":         "doubao-1-5-vision-lite-250315",
+	"Deepseek-R1-VolcEngine":         "deepseek-r1-250528",
+	"Deepseek-V3-VolcEngine":         "deepseek-v3-250324",
+}
 
 type volcModelManager struct {
 	models       []*modelmgr.Model
@@ -45,8 +61,8 @@ type volcModelManager struct {
 func NewModelMgr(staticModels []*modelmgr.Model) (modelmgr.Manager, error) {
 
 	cfg := volcengine.NewConfig().
-		WithCredentials(credentials.NewStaticCredentials(os.Getenv(consts.VolcengineMAASAccessKey), os.Getenv(consts.VolcengineMAASSecretKey), "")).
-		WithRegion(os.Getenv(consts.VolcengineMAASRegion))
+		WithCredentials(credentials.NewStaticCredentials(os.Getenv(consts.VolcengineAccessKey), os.Getenv(consts.VolcengineSecretKey), "")).
+		WithRegion(os.Getenv(consts.VolcengineRegion))
 
 	sess, err := session.NewSession(cfg)
 	if err != nil {
@@ -70,20 +86,25 @@ func NewModelMgr(staticModels []*modelmgr.Model) (modelmgr.Manager, error) {
 
 func (v *volcModelManager) initModelList(ctx context.Context) error {
 	newModels := make([]*modelmgr.Model, 0)
+	logs.CtxInfof(ctx, "init model list, model count: %d", len(v.models))
 	for i := range v.models {
+		logs.CtxInfof(ctx, "init model list, model name: %s, pre endpoint id: %s", v.models[i].Name, preEndpointID[v.models[i].Name])
 		m := v.models[i]
-		if m.Meta.Protocol != chatmodel.ProtocolArk || !strings.Contains(m.Meta.ConnConfig.BaseURL, "volces") {
+		if m.Meta.Protocol != chatmodel.ProtocolArk || !strings.Contains(m.Meta.ConnConfig.BaseURL, "volces") ||
+			preEndpointID[m.Name] == "" {
 			continue
 		}
-		item, err := v.listEndpoints(ctx, m.Name)
-		if err != nil {
-			continue
-		}
-		m.Meta.ConnConfig.Model = *item.Id
+		// item, err := v.listEndpoints(ctx, m.Name)
+		// if err != nil {
+		// 	continue
+		// }
+		// m.Meta.ConnConfig.Model = *item.Id
+		m.Meta.ConnConfig.Model = preEndpointID[m.Name]
 		m.Meta.ConnConfig.APIKey = os.Getenv(consts.VolcengineMAASAPIKey)
 		m.Meta.Status = modelmgr.StatusInUse
 		newModels = append(newModels, m)
 	}
+	logs.CtxInfof(ctx, "init model list, new model count: %d", len(newModels))
 	v.models = newModels
 	mapping := make(map[int64]*modelmgr.Model, len(newModels))
 	for i := range newModels {
