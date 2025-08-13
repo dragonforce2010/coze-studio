@@ -96,6 +96,14 @@ const (
 	VolcengineMAASSecretKey = "VOLCENGINE_MAAS_SECRET_KEY"
 	VolcengineMAASRegion    = "VOLCENGINE_MAAS_REGION"
 	VolcengineMAASAPIKey    = "VOLCENGINE_MAAS_API_KEY"
+
+	OCRType     = "OCR_TYPE"
+	VeOCRAK     = "VE_OCR_AK"
+	VeOCRSK     = "VE_OCR_SK"
+	PPOCRAPIURL = "PADDLEOCR_OCR_API_URL"
+
+	ParserType        = "PARSER_TYPE"
+	PPStructureAPIURL = "PADDLEOCR_STRUCTURE_API_URL"
 )
 
 const (
