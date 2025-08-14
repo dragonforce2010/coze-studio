@@ -4,6 +4,8 @@ metadata:
   name: {{ printf "%s-server" (include "opencoze.fullname" .) }}
   labels:
     {{- include "opencoze.labels" . | nindent 4 }}
+  annotations:
+    service.beta.kubernetes.io/volcengine-loadbalancer-bandwidth: "200" 
 spec:
   type: {{ .Values.cozeServer.service.type }}
   ports:

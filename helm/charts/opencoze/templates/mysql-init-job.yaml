@@ -1,3 +1,4 @@
+{{- if .Values.mysql.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -41,3 +42,4 @@ spec:
               path: schema.sql
       restartPolicy: Never
   backoffLimit: 5
+{{- end }}
